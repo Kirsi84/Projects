@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+<br>
+<br>
+{% block content %}
+
+
+<form action="" method="post" name="product_list">
+<div></div>
+<span class="message">{{ message }}</span>
+
+<br> <br>
+{% if data %}
+
+<table id="tuotteet" style="width:100%">
+    <tbody>
+        <tr>
+            <th>Tunnus</th>
+            <th>Tuote</th>
+            <th>Kuvaus</th>
+            <th>Hinta</th>
+
+        </tr>
+
+        {% for item in data %}
+
+        <tr>
+
+            {% for x in item %}
+            <td>
+
+                {% if loop.first %}
+
+                <input type="checkbox" name="product_keys" value="{{ product_key }}" />
+
+                {% endif %}
+
+                {{ x }}
+            </td>
+
+            {% endfor %}
+
+        </tr>
+
+
+        {% endfor %}
+
+
+    </tbody>
+</table>
+
+<br />
+
+<div class="field is-grouped">
+    <div class="control">
+        <button class="button is-danger is-small">Tallenna</button>
+    </div>
+</div>
+{% endif %}
+
+</form>
+{% endblock %}
+
+
+

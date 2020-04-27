@@ -1,0 +1,77 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+
+.lbTitle {
+    width:150px;
+    display: inline-block;
+    height: 25px;
+}
+
+.message {
+    font-weight: 600;
+    font-size: large;
+    /*color: blue;*/
+}
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    /*padding: 5px;*/
+    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    border-color: black;
+    text-align: left;
+    /*padding: 8px;*/
+    padding: 2px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
