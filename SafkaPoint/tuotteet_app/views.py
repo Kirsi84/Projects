@@ -1,15 +1,26 @@
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, url_for
-from flask import request
+from flask import Flask, render_template, request, redirect, url_for
 
+# mysql database items
 import mysql.connector
 from mysql.connector import errorcode
 
-# import logging
-
 from . import app
+    
 
+def writeIntoLogFile(msg):
+    filename = "./logs/safkapoint.log"    
+    now = datetime.now()
+    formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")      
+        
+    f = open(filename,"a")
+    f.write(formatted_now + ":::" + msg +"\n")
+    f.close()
+
+
+writeIntoLogFile("Just testing!")  # Just a test
+    
 def getDbSettings():
     #local = (SERVER['REMOTE_ADDR']=='127.0.0.1' || SERVER['REMOTE_ADDR']=='::1')
    
@@ -39,10 +50,6 @@ def getDBProducts():
 
         dbSet = getDbSettings()       
       
-        # cnx = mysql.connector.connect(user='root', password='',
-        #                       host='localhost',
-        #                       database='noutopiste')
-
         cnx = mysql.connector.connect(user= dbSet['user'],
                               password=dbSet['password'],
                               host=dbSet['host'],
@@ -62,10 +69,10 @@ def getDBProducts():
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             msg = "Database does not exist"
         else:
-            msg = err
+            msg = err._full_msg
 
-       # writeToLog("getDBProducts: " +  msg)
-    
+        writeIntoLogFile("getDBProducts: " +  msg)
+          
     finally:
         cursor.close()
         cnx.close()
@@ -92,9 +99,6 @@ def updateDBProduct(name, description, price):
     
         # Make sure data is committed to the database
         cnx.commit()
-
-        # cursor.close()
-        # cnx.close()
  
     except mysql.connector.Error as err:
         msg = ""
@@ -103,81 +107,79 @@ def updateDBProduct(name, description, price):
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             msg = "Database does not exist"
         else:
-            msg = err
+            msg = err._full_msg
 
-       # writeToLog("getDBProducts: " +  msg)
+        writeIntoLogFile("updateDBProduct: " +  msg)
     
     finally:
         cursor.close()
         cnx.close()
 
 
-# def writeToLog(msg):
-#     logging.basicConfig(filename='log/flask_server.log' ,
-#     level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
- 
-
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-   
-    if request.method == "POST":
-        form_product_keys = request.form.getlist("product_keys")
+    try:
+        if request.method == "POST":
 
-        tilaukset = ""
-        for product_key in form_product_keys:
-           tilaukset += product_key + " " 
+            # todo: processing missing
+            # form_product_keys = request.form.getlist("product_keys")
+            # tilaukset = ""
+            # for product_key in form_product_keys:
+            #      tilaukset += product_key + " " 
 
-        return redirect(url_for('order'))
-        # return render_template(
-        #    'order.html',
-        #    title='Tilaus',
-        #    year=datetime.now().year,
-        #    message=tilaukset)
-    else:
-       now = datetime.now()
-       formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")
-        
-       products = getDBProducts()
+            return redirect(url_for('order'))
+            # return render_template(
+            #    'order.html',
+            #    title='Tilaus',
+            #    year=datetime.now().year,
+            #    message=tilaukset)
+        else:
 
-       return render_template(
-            "index.html",
-            title = "Tuotteet",
-            message = "Valitse tuotteet listalta - " + formatted_now + " ",
-            data = products)
+            now = datetime.now()
+            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")
+                
+            products = getDBProducts()
 
-    # return render_template("home.html")
+            return render_template(
+                    "index.html",
+                    title = "Tuotteet",
+                    message = "Valitse tuotteet listalta - " + formatted_now + " ",
+                    data = products)
 
+    except:
+        return redirect(url_for('customerror'))
 
 @app.route('/addProduct', methods=['GET', 'POST'])
 def addProduct():
-   
-    if request.method == "GET":
-       return render_template(
-            "addProduct.html",
-            title = "Lisää tuote",
-            year=datetime.now().year,
-            message = "Tuotteen tiedot "
-            )
-    else:
-        name = request.form["nimi"]
-        description = request.form["kuvaus"]
-        price = request.form["hinta"]
-        
-        updateDBProduct(name, description, price)
-        
+    try:
+        if request.method == "GET":
+            return render_template(
+                    "addProduct.html",
+                    title = "Lisää tuote",
+                    year=datetime.now().year,
+                    message = "Tuotteen tiedot "
+                    )
+        else:
+            name = request.form["nimi"]
+            description = request.form["kuvaus"]
+            price = request.form["hinta"]
+            
+            updateDBProduct(name, description, price)
+            
 
-        now = datetime.now()
-        formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")        
-        products = getDBProducts()
+            now = datetime.now()
+            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")        
+            products = getDBProducts()
 
-        return render_template(
-            "index.html",
-            title = "Noutopiste",
-            year=datetime.now().year,
-            message = "Valitse tuotteet listalta - " + formatted_now + " ",
-            data = products)
-
+            return render_template(
+                "index.html",
+                title = "Noutopiste",
+                year=datetime.now().year,
+                message = "Valitse tuotteet listalta - " + formatted_now + " ",
+                data = products)
+    except:
+        return redirect(url_for('customerror'))
 
 @app.route('/order/')
 def order():
@@ -217,4 +219,15 @@ def about():
         title='Tietoja',
         year=datetime.now().year,
         message='Python/Flask'
+    )
+
+
+@app.route('/customerror', methods=['GET'])
+def customerror():
+    """Renders the error page."""
+    return render_template(
+        'customerror.html',
+        title='Virhe',
+        year=datetime.now().year,
+        message='Kokeile hetken kuluttua uudelleen!'
     )
