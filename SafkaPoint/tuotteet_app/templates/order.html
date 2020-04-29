@@ -1,8 +1,57 @@
 ﻿{% extends "layout.html" %}
 {% block title %}{% endblock %}
+<br>
+<br>
 {% block content %}
 
-<h2>{{ title }}</h2>
-<h3>{{ message }}</h3>
+<br> <br>
+<form action="" method="post" name="product_list">
+<div></div>
+<span class="message">{{ message }}</span>
 
+<br> <br>
+{% if data %}
+
+<table id="tuotteet" style="width:100%">
+    <tbody>
+        <tr>
+            <th>Tuotenumero</th>
+            <th>Tuote</th>
+            <th>Kuvaus</th>
+            <th>Hinta</th>
+        </tr>
+
+        {% for product in data %}
+    
+            <tr>
+                <!-- <td><input type="checkbox" name="product_keys" value="{{ product["id"] }}" />
+                     {{ product["id"] }}
+                </td> -->
+                <td> {{ product["id"] }}</td>
+                <td> {{ product["nimi"] }}</td>
+                <td> {{ product["kuvaus"] }}</td>
+                <td> {{ product["hinta"] }}</td>
+            </tr
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<br />
+
+<div class="field is-grouped">
+    <div class="control">
+        <!-- <button class="button is-danger is-small">Tallenna</button> -->
+        <button class="sButton">Tallenna</button>
+    </div>
+</div>
+{% endif %}
+
+</form>
 {% endblock %}
+
+
+
+

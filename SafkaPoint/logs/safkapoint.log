@@ -1,2 +1,58 @@
-27.04.2020 klo 21:16:58:::Just testing!
-27.04.2020 klo 21:19:04:::Just testing!
+28.04.2020 klo 20:07:22:::Just testing!
+28.04.2020 klo 20:07:26:::getDBProducts: 2003: Can't connect to MySQL server on 'localhost:3306' (10061 No connection could be made because the target machine actively refused it)
+28.04.2020 klo 20:07:26:::local variable 'cursor' referenced before assignment
+28.04.2020 klo 20:08:29:::name 'Session' is not defined
+28.04.2020 klo 20:40:17:::Just testing!
+28.04.2020 klo 20:43:45:::Just testing!
+28.04.2020 klo 21:08:46:::Just testing!
+28.04.2020 klo 21:09:04:::name 'getDBProducts' is not defined
+28.04.2020 klo 21:10:19:::Just testing!
+28.04.2020 klo 21:17:59:::Just testing!
+28.04.2020 klo 21:18:42:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+28.04.2020 klo 21:18:42:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+28.04.2020 klo 21:21:46:::Just testing!
+28.04.2020 klo 21:32:59:::Just testing!
+28.04.2020 klo 21:34:27:::400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+28.04.2020 klo 21:36:11:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:44:50:::Just testing!
+29.04.2020 klo 07:44:55:::getDBProducts: 2003: Can't connect to MySQL server on 'localhost:3306' (10061 No connection could be made because the target machine actively refused it)
+29.04.2020 klo 07:44:55:::local variable 'cursor' referenced before assignment
+29.04.2020 klo 07:46:26:::Just testing!
+29.04.2020 klo 07:48:35:::400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+29.04.2020 klo 07:49:49:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:50:03:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:50:16:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:50:42:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:50:50:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:50:54:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:53:33:::400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+29.04.2020 klo 07:54:17:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:57:15:::getDBProducts: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+29.04.2020 klo 07:59:42:::Just testing!
+29.04.2020 klo 08:06:59:::Just testing!
+29.04.2020 klo 08:08:00:::getDBProductsByIdList: 1054 (42S22): Unknown column 'name' in 'order clause'
+29.04.2020 klo 08:09:28:::Just testing!
+29.04.2020 klo 08:10:10:::getDBProductsByIdList: 1054 (42S22): Unknown column 'name' in 'order clause'
+29.04.2020 klo 08:12:53:::Just testing!
+29.04.2020 klo 08:13:54:::getDBProductsByIdList: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY nimi' at line 1
+29.04.2020 klo 08:16:10:::Just testing!
+29.04.2020 klo 08:16:39:::Just testing!
+29.04.2020 klo 08:18:43:::getDBProductsByIdList: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY nimi' at line 1
+29.04.2020 klo 08:28:06:::Just testing!
+29.04.2020 klo 08:28:52:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:29:27:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:29:33:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:29:47:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:30:33:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:31:01:::Just testing!
+29.04.2020 klo 08:31:07:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:31:41:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:31:54:::local variable 'sqlwhere' referenced before assignment
+29.04.2020 klo 08:34:50:::Just testing!
+29.04.2020 klo 08:36:47:::Just testing!
+29.04.2020 klo 08:38:52:::Just testing!
+29.04.2020 klo 09:41:18:::400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+29.04.2020 klo 11:44:19:::Just testing!
+29.04.2020 klo 11:44:25:::getDBProducts: 2003: Can't connect to MySQL server on 'localhost:3306' (10061 No connection could be made because the target machine actively refused it)
+29.04.2020 klo 11:44:25:::local variable 'cursor' referenced before assignment
+29.04.2020 klo 11:44:57:::Just testing!

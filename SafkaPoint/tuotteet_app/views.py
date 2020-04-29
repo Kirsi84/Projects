@@ -34,14 +34,52 @@ def getDbSettings():
         dbSettings = {"host": "127.0.0.1:53181", "user": "azure", "password": "6#vWHD_$", "database": "noutopiste" }
     return dbSettings
 
+def getDBProductsByIdList(product_keys):
+    products = ()
+    try:
+        sqlwhere = ""
+        if len(product_keys) > 0:
+            sqlwhere =  ','.join([str(x) for x in product_keys])
 
-# ostoslista = [[1, "hiiva", "kuivahiiva", "1.50"],
-#                  [2, "leipä", "juureen leivottu", "2.50"],
-#                  [3, "maito", "laktoositon", "2.2"],
-#                  [4, "sitruuna", "luomu", "2.30"],
-#                  [5, "sokeri", "kidesokeri", "2.50"],                
-#                  [6, "vesi", "hiilihapoton", "1"],
-#                  [7, "voi", "luomu", "3.2"]]
+            sqlwhere =  "WHERE id in (" + sqlwhere + " ) "
+
+        dbSet = getDbSettings()       
+      
+        cnx = mysql.connector.connect(user= dbSet['user'],
+                              password=dbSet['password'],
+                              host=dbSet['host'],
+                              database=dbSet['database'])
+
+        cursor  = cnx.cursor()
+ #       query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote WHERE id in (" + sqlwhere + " )" + " ORDER BY nimi")
+
+        if sqlwhere == "":
+            query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote ORDER BY nimi")
+        else:
+            query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote " + sqlwhere + "  ORDER BY nimi")
+
+
+        cursor.execute(query)
+     
+        columns = cursor.description 
+        result = [{columns[index][0]:column for index, column in enumerate(value)} for value in cursor.fetchall()]
+       
+        return result
+
+    except mysql.connector.Error as err:
+        msg = ""
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            msg = "Something is wrong with your user name or password"
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            msg = "Database does not exist"
+        else:
+            msg = err._full_msg
+
+        writeIntoLogFile("getDBProductsByIdList: " +  msg)
+          
+    finally:
+        cursor.close()
+        cnx.close()
 
 
 def getDBProducts():
@@ -58,8 +96,10 @@ def getDBProducts():
         cursor  = cnx.cursor()
         query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote order by nimi")  
         cursor.execute(query)
-        result  = cursor.fetchall()
-
+     
+        columns = cursor.description 
+        result = [{columns[index][0]:column for index, column in enumerate(value)} for value in cursor.fetchall()]
+       
         return result
 
     except mysql.connector.Error as err:
@@ -121,19 +161,20 @@ def updateDBProduct(name, description, price):
 def home():
     try:
         if request.method == "POST":
+            now = datetime.now()
+            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")
 
-            # todo: processing missing
-            # form_product_keys = request.form.getlist("product_keys")
-            # tilaukset = ""
-            # for product_key in form_product_keys:
-            #      tilaukset += product_key + " " 
-
-            return redirect(url_for('order'))
-            # return render_template(
-            #    'order.html',
-            #    title='Tilaus',
-            #    year=datetime.now().year,
-            #    message=tilaukset)
+            form_product_keys = request.form.getlist("product_keys")
+            
+            orders = getDBProductsByIdList(form_product_keys)
+           
+            return render_template(
+                 "order.html",
+                    title = "Tilaukset",
+                    year=datetime.now().year,
+                    message = "Tilatut tuotteet - " + formatted_now + " ",
+                    data = orders)
+   
         else:
 
             now = datetime.now()
@@ -141,13 +182,19 @@ def home():
                 
             products = getDBProducts()
 
+            for product in products:
+                id =  product["id"]
+                nimi = product["nimi"]
+           
             return render_template(
                     "index.html",
                     title = "Tuotteet",
+                    year=datetime.now().year,
                     message = "Valitse tuotteet listalta - " + formatted_now + " ",
                     data = products)
 
-    except:
+    except Exception as e:
+        writeIntoLogFile(str(e))
         return redirect(url_for('customerror'))
 
 @app.route('/addProduct', methods=['GET', 'POST'])
@@ -167,7 +214,6 @@ def addProduct():
             
             updateDBProduct(name, description, price)
             
-
             now = datetime.now()
             formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")        
             products = getDBProducts()
@@ -178,28 +224,23 @@ def addProduct():
                 year=datetime.now().year,
                 message = "Valitse tuotteet listalta - " + formatted_now + " ",
                 data = products)
-    except:
+
+    except Exception as e:
+        writeIntoLogFile(str(e))
         return redirect(url_for('customerror'))
 
-@app.route('/order/')
+
+@app.route('/order', methods=['GET', 'POST'])
 def order():
-    """Renders the about page."""
+    """Renders the order page."""
+  
     return render_template(
         'order.html',
         title='Tilaus',
         year=datetime.now().year,
         message='Tilaus-toimintoa ei ole toteutettu'
     )
-   
-    # if request.method == "GET":
-    #     products = getDBProducts()
-    #     return render_template("order.html")
-    #     #   return render_template("order.html", data = products)
-    # else:
-    #     form_movie_keys = request.form.getlist("movie_keys")
-        # for form_movie_key in form_movie_keys:
-        #     db.delete_movie(int(form_movie_key))
-        # return redirect(url_for("movies_page")) 
+
 
 @app.route('/contact/')
 def contact():
