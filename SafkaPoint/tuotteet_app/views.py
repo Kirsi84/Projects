@@ -6,18 +6,20 @@ from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 from mysql.connector import errorcode
 
-from . import app
-    
+from . import app    
 
 def writeIntoLogFile(msg):
     filename = "./logs/safkapoint.log"    
-    now = datetime.now()
-    formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")      
-        
+    # now = datetime.now()
+    # formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")      
+    formatted_now  = getDate()
     f = open(filename,"a")
     f.write(formatted_now + ":::" + msg +"\n")
     f.close()
 
+def getDate():
+    now = datetime.now()
+    return now.strftime("%d.%m.%Y klo %H:%M:%S")
 
 writeIntoLogFile("Just testing!")  # Just a test
     
@@ -51,7 +53,6 @@ def getDBProductsByIdList(product_keys):
                               database=dbSet['database'])
 
         cursor  = cnx.cursor()
- #       query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote WHERE id in (" + sqlwhere + " )" + " ORDER BY nimi")
 
         if sqlwhere == "":
             query   = ("SELECT id, nimi, kuvaus, hinta FROM tuote ORDER BY nimi")
@@ -161,31 +162,38 @@ def updateDBProduct(name, description, price):
 def home():
     try:
         if request.method == "POST":
-            now = datetime.now()
-            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")
 
             form_product_keys = request.form.getlist("product_keys")
+            if len(form_product_keys) > 0:
+
+                formatted_now  = getDate()
+ 
+                orders = getDBProductsByIdList(form_product_keys)
             
-            orders = getDBProductsByIdList(form_product_keys)
-           
-            return render_template(
-                 "order.html",
-                    title = "Tilaukset",
-                    year=datetime.now().year,
-                    message = "Tilatut tuotteet - " + formatted_now + " ",
-                    data = orders)
+                return render_template(
+                    "order.html",
+                        title = "Tilaukset",
+                        year=datetime.now().year,
+                        message = "Tilatut tuotteet - " + formatted_now + " ",
+                        data = orders)
+            else:
+                formatted_now  = getDate()
+                    
+                products = getDBProducts()
+                
+                return render_template(
+                        "index.html",
+                        title = "Tuotteet",
+                        year=datetime.now().year,
+                        message = "Valitse tuotteet listalta (valitse vähintään yksi) - " + formatted_now + " ",
+                        data = products)
    
         else:
 
-            now = datetime.now()
-            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")
+            formatted_now  = getDate()
                 
             products = getDBProducts()
-
-            for product in products:
-                id =  product["id"]
-                nimi = product["nimi"]
-           
+            
             return render_template(
                     "index.html",
                     title = "Tuotteet",
@@ -194,7 +202,7 @@ def home():
                     data = products)
 
     except Exception as e:
-        writeIntoLogFile(str(e))
+        writeIntoLogFile("home: " + str(e))
         return redirect(url_for('customerror'))
 
 @app.route('/addProduct', methods=['GET', 'POST'])
@@ -214,32 +222,26 @@ def addProduct():
             
             updateDBProduct(name, description, price)
             
-            now = datetime.now()
-            formatted_now = now.strftime("%d.%m.%Y klo %H:%M:%S")        
-            products = getDBProducts()
-
-            return render_template(
-                "index.html",
-                title = "Noutopiste",
-                year=datetime.now().year,
-                message = "Valitse tuotteet listalta - " + formatted_now + " ",
-                data = products)
-
+            return redirect(url_for('home'))
+         
     except Exception as e:
-        writeIntoLogFile(str(e))
+        writeIntoLogFile("addProduct" + str(e))
         return redirect(url_for('customerror'))
 
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
     """Renders the order page."""
-  
-    return render_template(
-        'order.html',
-        title='Tilaus',
-        year=datetime.now().year,
-        message='Tilaus-toimintoa ei ole toteutettu'
-    )
+    try:
+        return render_template(
+            'order.html',
+            title='Tilaus',
+            year=datetime.now().year,
+            message='Tilaus-toimintoa ei ole toteutettu'
+        )
+    except Exception as e:
+        writeIntoLogFile("order: " + str(e))
+        return redirect(url_for('customerror'))
 
 
 @app.route('/contact/')
