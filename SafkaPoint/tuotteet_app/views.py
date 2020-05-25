@@ -33,7 +33,7 @@ def getDbSettings():
     if (local):
         dbSettings = {"host": "localhost", "user": "root", "password": "", "database": "noutopiste" }   
     else:
-        dbSettings = {"host": "127.0.0.1:53181", "user": "azure", "password": "6#vWHD_$", "database": "noutopiste" }
+        dbSettings = {"host": "", "user": "", "password": "", "database": "noutopiste" }
     return dbSettings
 
 def getDBProductsByIdList(product_keys):
